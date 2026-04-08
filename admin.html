@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 约拍网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background-color: #343a40;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #fff;
+            padding: 12px 20px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #495057;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+        }
+        .status-badge {
+            cursor: pointer;
+        }
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 15px 0;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- 侧边栏 -->
+        <div class="col-md-3 col-lg-2 p-0 sidebar">
+            <div class="text-center py-4">
+                <h4 class="text-white">约拍网管理端</h4>
+                <p class="text-white-50 small" id="adminName">管理员</p>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-page="orders">📋 订单管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="works">🖼️ 作品管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="customers">👥 客户管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="settings">⚙️ 服务设置</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="#" id="logoutBtn">🚪 退出登录</a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="col-md-9 col-lg-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 id="pageTitle">订单管理</h2>
+                <button class="btn btn-success" id="addWorkBtn" style="display: none;">+ 上传新作品</button>
+            </div>
+            
+            <!-- 订单管理页面 -->
+            <div id="ordersPage">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">所有预约订单</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>订单号</th>
+                                        <th>客户姓名</th>
+                                        <th>联系电话</th>
+                                        <th>摄影师</th>
+                                        <th>套餐价格</th>
+                                        <th>预约时间</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    <tr>
+                                        <td colspan="8" class="text-center">暂无订单</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 作品管理页面（默认隐藏） -->
+            <div id="worksPage" style="display: none;">
+                <div class="row" id="worksManageGrid">
+                    <!-- 作品管理卡片会动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 客户管理页面（默认隐藏） -->
+            <div id="customersPage" style="display: none;">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">客户信息列表</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>客户姓名</th>
+                                        <th>联系电话</th>
+                                        <th>预约次数</th>
+                                        <th>最近预约</th>
+                                        <th>总消费</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customersTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 服务设置页面（默认隐藏） -->
+            <div id="settingsPage" style="display: none;">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">服务套餐设置</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="settingsForm">
+                            <div class="mb-3">
+                                <label class="form-label">基础套餐价格 (元)</label>
+                                <input type="number" class="form-control" id="basicPrice" value="129">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">标准套餐价格 (元)</label>
+                                <input type="number" class="form-control" id="standardPrice" value="225">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">豪华套餐价格 (元)</label>
+                                <input type="number" class="form-control" id="premiumPrice" value="488">
+                            </div>
+                            <button type="submit" class="btn btn-primary">保存设置</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 修改状态模态框 -->
+<div class="modal fade" id="statusModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">修改订单状态</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="currentOrderId">
+                <label class="form-label">选择新状态</label>
+                <select class="form-select" id="newStatus">
+                    <option value="待审核">待审核</option>
+                    <option value="已确认">已确认</option>
+                    <option value="已完成">已完成</option>
+                    <option value="已取消">已取消</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirmStatusChange">确认修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2026 约拍网 版权所有</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 检查登录状态
+    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
+        window.location.href = 'login.html';
+    }
+    
+    document.getElementById('adminName').textContent = localStorage.getItem('adminUsername') || '管理员';
+    
+    // 页面切换
+    const navLinks = document.querySelectorAll('.sidebar .nav-link');
+    const pages = {
+        orders: document.getElementById('ordersPage'),
+        works: document.getElementById('worksPage'),
+        customers: document.getElementById('customersPage'),
+        settings: document.getElementById('settingsPage')
+    };
+    const pageTitle = document.getElementById('pageTitle');
+    const addWorkBtn = document.getElementById('addWorkBtn');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.id === 'logoutBtn') return;
+            e.preventDefault();
+            const page = this.getAttribute('data-page');
+            
+            navLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            
+            Object.keys(pages).forEach(key => {
+                pages[key].style.display = 'none';
+            });
+            
+            if (pages[page]) {
+                pages[page].style.display = 'block';
+            }
+            
+            if (page === 'orders') {
+                pageTitle.textContent = '订单管理';
+                addWorkBtn.style.display = 'none';
+                loadOrders();
+            } else if (page === 'works') {
+                pageTitle.textContent = '作品管理';
+                addWorkBtn.style.display = 'inline-block';
+                loadWorksManage();
+            } else if (page === 'customers') {
+                pageTitle.textContent = '客户管理';
+                addWorkBtn.style.display = 'none';
+                loadCustomers();
+            } else if (page === 'settings') {
+                pageTitle.textContent = '服务设置';
+                addWorkBtn.style.display = 'none';
+            }
+        });
+    });
+    
+    // 加载订单
+    function loadOrders() {
+        const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+        const tbody = document.getElementById('ordersTableBody');
+        
+        if (bookings.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center">暂无订单</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = '';
+        bookings.reverse().forEach(booking => {
+            const statusClass = booking.status === '待审核' ? 'warning' : 
+                               (booking.status === '已确认' ? 'info' : 
+                               (booking.status === '已完成' ? 'success' : 'secondary'));
+            tbody.innerHTML += `
+                <tr>
+                    <td>${booking.orderId}</td>
+                    <td>${booking.name}</td>
+                    <td>${booking.phone}</td>
+                    <td>摄影师${booking.photographer}</td>
+                    <td>¥${booking.package}</td>
+                    <td>${booking.date} ${booking.time}</td>
+                    <td><span class="badge bg-${statusClass} status-badge" data-orderid="${booking.orderId}" data-status="${booking.status}">${booking.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteOrder('${booking.orderId}')">删除</button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        // 添加状态点击事件
+        document.querySelectorAll('.status-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                document.getElementById('currentOrderId').value = this.getAttribute('data-orderid');
+                document.getElementById('newStatus').value = this.getAttribute('data-status');
+                new bootstrap.Modal(document.getElementById('statusModal')).show();
+            });
+        });
+    }
+    
+    // 删除订单
+    window.deleteOrder = function(orderId) {
+        if (confirm('确定要删除这个订单吗？')) {
+            let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            bookings = bookings.filter(b => b.orderId !== orderId);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            loadOrders();
+        }
+    }
+    
+    // 确认修改状态
+    document.getElementById('confirmStatusChange').addEventListener('click', function() {
+        const orderId = document.getElementById('currentOrderId').value;
+        const newStatus = document.getElementById('newStatus').value;
+        
+        let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+        const booking = bookings.find(b => b.orderId === orderId);
+        if (booking) {
+            booking.status = newStatus;
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+        }
+        
+        bootstrap.Modal.getInstance(document.getElementById('statusModal')).hide();
+        loadOrders();
+    });
+    
+    // 加载作品管理
+    function loadWorksManage() {
+        const works = JSON.parse(localStorage.getItem('works') || '[]');
+        const container = document.getElementById('worksManageGrid');
+        
+        if (works.length === 0) {
+            container.innerHTML = '<div class="col-12 text-center text-muted">暂无作品，点击"上传新作品"添加</div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        works.forEach((work, index) => {
+            container.innerHTML += `
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="${work.image}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h6>${work.title}</h6>
+                            <p class="small text-muted">${work.category}</p>
+                            <button class="btn btn-sm btn-danger" onclick="deleteWork(${index})">删除</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    
+    window.deleteWork = function(index) {
+        if (confirm('确定删除这个作品吗？')) {
+            let works = JSON.parse(localStorage.getItem('works') || '[]');
+            works.splice(index, 1);
+            localStorage.setItem('works', JSON.stringify(works));
+            loadWorksManage();
+        }
+    }
+    
+    // 上传作品
+    addWorkBtn.addEventListener('click', function() {
+        const title = prompt('请输入作品标题：');
+        if (!title) return;
+        const category = prompt('请输入作品分类（人像/风景/婚礼/商业）：');
+        if (!category) return;
+        const imageUrl = prompt('请输入图片URL（可使用随机图片如：https://picsum.photos/400/300?random=' + Date.now() + '）');
+        if (!imageUrl) return;
+        
+        const works = JSON.parse(localStorage.getItem('works') || '[]');
+        works.push({ title, category, image: imageUrl });
+        localStorage.setItem('works', JSON.stringify(works));
+        loadWorksManage();
+        alert('作品上传成功！');
+    });
+    
+    // 加载客户管理
+    function loadCustomers() {
+        const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+        const customerMap = new Map();
+        
+        bookings.forEach(booking => {
+            if (!customerMap.has(booking.phone)) {
+                customerMap.set(booking.phone, {
+                    name: booking.name,
+                    phone: booking.phone,
+                    count: 1,
+                    lastDate: booking.date,
+                    total: parseInt(booking.package)
+                });
+            } else {
+                const c = customerMap.get(booking.phone);
+                c.count++;
+                if (booking.date > c.lastDate) c.lastDate = booking.date;
+                c.total += parseInt(booking.package);
+            }
+        });
+        
+        const tbody = document.getElementById('customersTableBody');
+        if (customerMap.size === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">暂无客户数据</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = '';
+        customerMap.forEach(customer => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${customer.name}</td>
+                    <td>${customer.phone}</td>
+                    <td>${customer.count}次</td>
+                    <td>${customer.lastDate}</td>
+                    <td>¥${customer.total}</td>
+                    <td><button class="btn btn-sm btn-outline-primary" onclick="alert('客户电话：${customer.phone}')">联系</button></td>
+                </tr>
+            `;
+        });
+    }
+    
+    // 服务设置保存
+    document.getElementById('settingsForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('套餐价格已保存！');
+    });
+    
+    // 退出登录
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('isAdminLoggedIn');
+        localStorage.removeItem('adminUsername');
+        window.location.href = 'login.html';
+    });
+    
+    // 初始加载订单
+    loadOrders();
+</script>
+</body>
+</html>

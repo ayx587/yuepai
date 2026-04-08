@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品展示 - 约拍网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .work-card { cursor: pointer; transition: transform 0.3s; margin-bottom: 25px; }
+        .work-card:hover { transform: scale(1.03); }
+        .work-img { height: 250px; width: 100%; object-fit: cover; }
+        .footer { background-color: #333; color: white; padding: 40px 0; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">📷 约拍网</a>
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
+                <li class="nav-item"><a class="nav-link active" href="works.html">作品展示</a></li>
+                <li class="nav-item"><a class="nav-link" href="photographers.html">摄影师</a></li>
+                <li class="nav-item"><a class="nav-link" href="booking.html">立即预约</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">管理登录</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-4">
+    <h2 class="text-center">📷 摄影作品集</h2>
+    <p class="text-center text-muted">浏览摄影师优秀作品，寻找灵感</p>
+</div>
+
+<!-- 作品筛选 -->
+<div class="container mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="btn-group w-100">
+                <button class="btn btn-outline-primary filter-btn active" data-filter="all">全部</button>
+                <button class="btn btn-outline-primary filter-btn" data-filter="人像">人像</button>
+                <button class="btn btn-outline-primary filter-btn" data-filter="风景">风景</button>
+                <button class="btn btn-outline-primary filter-btn" data-filter="婚礼">婚礼</button>
+                <button class="btn btn-outline-primary filter-btn" data-filter="商业">商业</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 作品网格 -->
+<div class="container">
+    <div class="row">
+        <!-- 作品1 - 人像 -->
+        <div class="col-md-6 col-lg-4 work-item" data-category="人像">
+            <div class="card work-card">
+                <img src="images/青春.jpg" class="work-img" alt="清新人像">
+                <div class="card-body">
+                    <h5 class="card-title">清新人像</h5>
+                    <p class="card-text">摄影师：张摄影师 | 风格：日系清新</p>
+                    <span class="badge bg-secondary">人像摄影</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 作品2 - 人像 -->
+        <div class="col-md-6 col-lg-4 work-item" data-category="人像">
+            <div class="card work-card">
+                <img src="images/活力.jpg" class="work-img" alt="时尚人像">
+                <div class="card-body">
+                    <h5 class="card-title">时尚人像</h5>
+                    <p class="card-text">摄影师：李摄影师 | 风格：时尚大片</p>
+                    <span class="badge bg-secondary">人像摄影</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 作品3 - 风景 -->
+        <div class="col-md-6 col-lg-4 work-item" data-category="风景">
+            <div class="card work-card">
+                <img src="images/秋日.JPG" class="work-img" alt="山川风景">
+                <div class="card-body">
+                    <h5 class="card-title">山川风景</h5>
+                    <p class="card-text">摄影师：王摄影师 | 风格：风光摄影</p>
+                    <span class="badge bg-secondary">风景摄影</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 作品4 - 风景 -->
+        <div class="col-md-6 col-lg-4 work-item" data-category="风景">
+            <div class="card work-card">
+                <img src="images/希望.jpg" class="work-img" alt="森林风景">
+                <div class="card-body">
+                    <h5 class="card-title">森林风景</h5>
+                    <p class="card-text">摄影师：赵摄影师 | 风格：自然风光</p>
+                    <span class="badge bg-secondary">风景摄影</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 作品5 - 婚礼 -->
+        <div class="col-md-6 col-lg-4 work-item" data-category="婚礼">
+            <div class="card work-card">
+                <img src="images/婚礼.JPG" class="work-img" alt="浪漫婚礼">
+                <div class="card-body">
+                    <h5 class="card-title">浪漫婚礼</h5>
+                    <p class="card-text">摄影师：孙摄影师 | 风格：纪实婚礼</p>
+                    <span class="badge bg-secondary">婚礼摄影</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 作品6 - 商业 -->
+        <div class="col-md-6 col-lg-4 work-item" data-category="商业">
+            <div class="card work-card">
+                <img src="images/氛围.jpg" class="work-img" alt="产品摄影">
+                <div class="card-body">
+                    <h5 class="card-title">产品摄影</h5>
+                    <p class="card-text">摄影师：周摄影师 | 风格：商业产品</p>
+                    <span class="badge bg-secondary">商业摄影</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container text-center">
+        <p>&copy; 2026 约拍网 版权所有</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 筛选功能
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const workItems = document.querySelectorAll('.work-item');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filterValue = this.getAttribute('data-filter');
+            workItems.forEach(item => {
+                if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

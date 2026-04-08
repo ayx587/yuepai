@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线预约 - 约拍网</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .booking-form {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        .package-card {
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        .package-card:hover, .package-card.selected {
+            border-color: #0d6efd;
+            background-color: #e7f1ff;
+        }
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">📷 约拍网</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
+                <li class="nav-item"><a class="nav-link" href="works.html">作品展示</a></li>
+                <li class="nav-item"><a class="nav-link" href="photographers.html">摄影师</a></li>
+                <li class="nav-item"><a class="nav-link active" href="booking.html">立即预约</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">管理登录</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">📅 在线预约拍摄</h2>
+    <p class="text-center text-muted mb-5">填写以下信息，我们将尽快与你联系</p>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="booking-form">
+                <form id="bookingForm">
+                    <!-- 选择摄影师 -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">选择摄影师 <span class="text-danger">*</span></label>
+                        <select class="form-select" id="photographer" required>
+                            <option value="">请选择摄影师</option>
+                            <option value="张摄影师">张摄影师 - 人像摄影 - ¥225/起</option>
+                            <option value="李摄影师">李摄影师 - 婚礼摄影 - ¥325/起</option>
+                            <option value="王摄影师">王摄影师 - 商业摄影 - ¥588/起</option>
+                            <option value="赵摄影师">赵摄影师 - 风景摄影 - ¥89/起</option>
+                            <option value="孙摄影师">赵摄影师 - 人像摄影 - ¥129/起</option>
+                            <option value="周摄影师">周摄影师 - 婚礼摄影 - ¥488/起</option>
+                        </select>
+                    </div>
+                    
+                    <!-- 选择套餐 -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">选择套餐 <span class="text-danger">*</span></label>
+                        <div class="row" id="packageOptions">
+                            <div class="col-md-4">
+                                <div class="card package-card" data-price="129">
+                                    <div class="card-body text-center">
+                                        <h6>基础套餐</h6>
+                                        <p class="text-primary fw-bold">¥129</p>
+                                        <small class="text-muted">2小时拍摄+精修10张</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card package-card" data-price="225">
+                                    <div class="card-body text-center">
+                                        <h6>标准套餐</h6>
+                                        <p class="text-primary fw-bold">¥225</p>
+                                        <small class="text-muted">4小时拍摄+精修20张+相册</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card package-card" data-price="488">
+                                    <div class="card-body text-center">
+                                        <h6>豪华套餐</h6>
+                                        <p class="text-primary fw-bold">¥488</p>
+                                        <small class="text-muted">全天拍摄+精修40张+相册+相框</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="selectedPrice" value="">
+                    </div>
+                    
+                    <!-- 预约日期时间 -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">预约日期 <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="bookingDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">预约时间 <span class="text-danger">*</span></label>
+                            <select class="form-select" id="bookingTime" required>
+                                <option value="">请选择时间</option>
+                                <option value="09:00">09:00 - 12:00</option>
+                                <option value="14:00">14:00 - 17:00</option>
+                                <option value="18:00">18:00 - 21:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- 客户信息 -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">您的姓名 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="customerName" placeholder="请输入姓名" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">联系电话 <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="customerPhone" placeholder="请输入手机号码" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">拍摄地点/备注</label>
+                        <textarea class="form-control" id="remarks" rows="3" placeholder="请填写拍摄地点、特殊要求等..."></textarea>
+                    </div>
+                    
+                    <div class="alert alert-info" id="priceDisplay">
+                        当前选择套餐价格：<strong>¥0</strong>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100">提交预约申请</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container text-center">
+        <p>&copy; 2026 约拍网 版权所有</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 套餐选择功能
+    let selectedPackage = null;
+    const packageCards = document.querySelectorAll('.package-card');
+    const selectedPriceInput = document.getElementById('selectedPrice');
+    const priceDisplay = document.getElementById('priceDisplay');
+    
+    packageCards.forEach(card => {
+        card.addEventListener('click', function() {
+            packageCards.forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+            const price = this.getAttribute('data-price');
+            selectedPriceInput.value = price;
+            priceDisplay.innerHTML = `当前选择套餐价格：<strong>¥${price}</strong>`;
+        });
+    });
+    
+    // 表单提交 - 发送到微信
+    const bookingForm = document.getElementById('bookingForm');
+    
+    bookingForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // 获取表单数据
+        const photographer = document.getElementById('photographer').value;
+        const bookingDate = document.getElementById('bookingDate').value;
+        const bookingTime = document.getElementById('bookingTime').value;
+        const customerName = document.getElementById('customerName').value;
+        const customerPhone = document.getElementById('customerPhone').value;
+        const remarks = document.getElementById('remarks').value;
+        const selectedPrice = document.getElementById('selectedPrice').value;
+        
+        // 简单验证
+        if (!photographer) {
+            alert('请选择摄影师');
+            return;
+        }
+        if (!selectedPrice) {
+            alert('请选择套餐');
+            return;
+        }
+        if (!bookingDate) {
+            alert('请选择预约日期');
+            return;
+        }
+        if (!bookingTime) {
+            alert('请选择预约时间');
+            return;
+        }
+        if (!customerName) {
+            alert('请输入您的姓名');
+            return;
+        }
+        if (!customerPhone) {
+            alert('请输入联系电话');
+            return;
+        }
+        
+        // 生成订单号
+        const orderId = 'YP' + Date.now() + Math.floor(Math.random() * 1000);
+        
+        // 保存到本地
+        const bookingData = {
+            orderId: orderId,
+            photographer: photographer,
+            package: selectedPrice,
+            date: bookingDate,
+            time: bookingTime,
+            name: customerName,
+            phone: customerPhone,
+            remarks: remarks,
+            status: '待审核',
+            createTime: new Date().toLocaleString()
+        };
+        
+        let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+        bookings.push(bookingData);
+        localStorage.setItem('bookings', JSON.stringify(bookings));
+        
+        // ===== 发送到微信 =====
+        const sendKey = "SCT334268TQpAEgnMk5ESPMLbzJYE1xpcx";  
+        
+        const message = `📷 新的预约订单\n------------------------\n订单号：${orderId}\n客户姓名：${customerName}\n联系电话：${customerPhone}\n预约日期：${bookingDate}\n预约时间：${bookingTime}\n选择套餐：¥${selectedPrice}\n备注：${remarks || '无'}`;
+        
+        try {
+            const response = await fetch(`https://sctapi.ftqq.com/${sendKey}.send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: '【约拍网】新订单通知',
+                    desp: message
+                })
+            });
+            const result = await response.json();
+            if (result.code === 0) {
+                console.log('微信通知发送成功');
+            } else {
+                console.log('微信通知发送失败，请检查SendKey');
+            }
+        } catch (error) {
+            console.log('微信通知发送失败，但订单已保存');
+        }
+        
+        // 显示成功提示
+        alert(`预约成功！订单号：${orderId}\n我们会在24小时内联系您确认。`);
+        
+        // 重置表单
+        bookingForm.reset();
+        packageCards.forEach(c => c.classList.remove('selected'));
+        selectedPriceInput.value = '';
+        priceDisplay.innerHTML = '当前选择套餐价格：<strong>¥0</strong>';
+    });
+    
+    // 设置最小日期为今天
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('bookingDate').min = today;
+</script>
+</body>
+</html>
