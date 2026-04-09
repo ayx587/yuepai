@@ -216,13 +216,14 @@
         { id: 6, name: "周摄影师", avatar: "https://picsum.photos/200/200?random=35", style: "婚礼", price: 488, rating: 5, desc: "婚礼摄影大师，记录每一份感动。" }
     ];
     
+    // 默认作品 - 使用本地图片
     const defaultWorks = [
-        { title: "清新人像", category: "人像", photographer: "张摄影师", description: "日系清新风格，自然光拍摄", image: "https://picsum.photos/id/20/400/300" },
-        { title: "时尚人像", category: "人像", photographer: "孙摄影师", description: "时尚大片风格，棚拍", image: "https://picsum.photos/id/30/400/300" },
-        { title: "山川风景", category: "风景", photographer: "赵摄影师", description: "壮丽山川，自然风光", image: "https://picsum.photos/id/15/400/300" },
-        { title: "森林风景", category: "风景", photographer: "赵摄影师", description: "森林秘境，自然光影", image: "https://picsum.photos/id/96/400/300" },
-        { title: "浪漫婚礼", category: "婚礼", photographer: "李摄影师", description: "浪漫瞬间，永恒回忆", image: "https://picsum.photos/id/29/400/300" },
-        { title: "产品摄影", category: "商业", photographer: "王摄影师", description: "商业产品，质感拍摄", image: "https://picsum.photos/id/0/400/300" }
+        { title: "清新人像", category: "人像", photographer: "张摄影师", description: "日系清新风格，自然光拍摄", image: "images/青春.jpg" },
+        { title: "时尚人像", category: "人像", photographer: "孙摄影师", description: "时尚大片风格，棚拍", image: "images/活力.jpg" },
+        { title: "山川风景", category: "风景", photographer: "赵摄影师", description: "壮丽山川，自然风光", image: "images/秋日.JPG" },
+        { title: "森林风景", category: "风景", photographer: "赵摄影师", description: "森林秘境，自然光影", image: "images/希望.jpg" },
+        { title: "浪漫婚礼", category: "婚礼", photographer: "李摄影师", description: "浪漫瞬间，永恒回忆", image: "images/婚礼.JPG" },
+        { title: "产品摄影", category: "商业", photographer: "王摄影师", description: "商业产品，质感拍摄", image: "images/氛围.jpg" }
     ];
     
     function initData() {
@@ -448,7 +449,7 @@
         workModal.hide();
     });
     
-    // ========== 摄影师管理（支持增删改，全部可删除） ==========
+    // ========== 摄影师管理 ==========
     let pendingEditAvatarBase64 = '';
     let editPhotographerIndex = -1;
     const editPhotographerModal = new bootstrap.Modal(document.getElementById('editPhotographerModal'));
