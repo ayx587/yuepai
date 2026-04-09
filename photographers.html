@@ -78,10 +78,10 @@
                 <label class="form-label">价格区间</label>
                 <select class="form-select mb-3" id="priceFilter">
                     <option value="all">全部价格</option>
-                    <option value="0-100">¥100以下</option>
-                    <option value="100-150">¥150 - ¥200</option>
-                    <option value="200-300">¥300 - ¥400</option>
-                    <option value="400-500">¥500以上</option>
+                    <option value="0-200">¥200以下</option>
+                    <option value="200-300">¥200 - ¥300</option>
+                    <option value="300-400">¥300 - ¥400</option>
+                    <option value="400-9999">¥400以上</option>
                 </select>
                 
                 <label class="form-label">排序方式</label>
@@ -106,49 +106,74 @@
 </div>
 
 <footer class="footer">
-    <div class="container">
-        <div class="text-center">
-            <p class="mb-0">&copy; 2026 约拍网 版权所有</p>
-        </div>
+    <div class="container text-center">
+        <p>&copy; 2026 约拍网 版权所有</p>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // 摄影师数据
-    const photographers = [
-        { id: 1, name: "张摄影师", avatar: "https://picsum.photos/200/200?random=30", style: "人像", price: 225, rating: 5, desc: "擅长人像摄影，风格清新自然，拍摄经验5年。", works: 120 },
-        { id: 2, name: "李摄影师", avatar: "https://picsum.photos/200/200?random=31", style: "婚礼", price: 325, rating: 4.5, desc: "专注婚礼摄影，捕捉最动人的瞬间。", works: 85 },
-        { id: 3, name: "王摄影师", avatar: "https://picsum.photos/200/200?random=32", style: "商业", price: 588, rating: 5, desc: "商业摄影专家，产品拍摄、广告摄影。", works: 200 },
-        { id: 4, name: "赵摄影师", avatar: "https://picsum.photos/200/200?random=33", style: "风景", price: 89, rating: 4, desc: "热爱大自然，擅长风光摄影。", works: 150 },
-        { id: 5, name: "孙摄影师", avatar: "https://picsum.photos/200/200?random=34", style: "人像", price: 129, rating: 4.5, desc: "时尚人像摄影师，作品多次获奖。", works: 98 },
-        { id: 6, name: "周摄影师", avatar: "https://picsum.photos/200/200?random=35", style: "婚礼", price: 488, rating: 5, desc: "婚礼摄影大师，记录每一份感动。", works: 160 }
+    // ========== 默认摄影师数据（首次使用时初始化） ==========
+    const defaultPhotographers = [
+        { id: 1, name: "张摄影师", avatar: "https://picsum.photos/200/200?random=30", style: "人像", price: 225, rating: 5, desc: "擅长人像摄影，风格清新自然，拍摄经验5年。", isDefault: true },
+        { id: 2, name: "李摄影师", avatar: "https://picsum.photos/200/200?random=31", style: "婚礼", price: 325, rating: 4.5, desc: "专注婚礼摄影，捕捉最动人的瞬间。", isDefault: true },
+        { id: 3, name: "王摄影师", avatar: "https://picsum.photos/200/200?random=32", style: "商业", price: 588, rating: 5, desc: "商业摄影专家，产品拍摄、广告摄影。", isDefault: true },
+        { id: 4, name: "赵摄影师", avatar: "https://picsum.photos/200/200?random=33", style: "风景", price: 89, rating: 4, desc: "热爱大自然，擅长风光摄影。", isDefault: true },
+        { id: 5, name: "孙摄影师", avatar: "https://picsum.photos/200/200?random=34", style: "人像", price: 129, rating: 4.5, desc: "时尚人像摄影师，作品多次获奖。", isDefault: true },
+        { id: 6, name: "周摄影师", avatar: "https://picsum.photos/200/200?random=35", style: "婚礼", price: 488, rating: 5, desc: "婚礼摄影大师，记录每一份感动。", isDefault: true }
     ];
     
+    // 初始化摄影师数据（如果 localStorage 中没有）
+    function initPhotographers() {
+        const existing = localStorage.getItem('photographers');
+        if (!existing || existing === '[]') {
+            localStorage.setItem('photographers', JSON.stringify(defaultPhotographers));
+        }
+    }
+    
+    // 获取所有摄影师
+    function getPhotographers() {
+        return JSON.parse(localStorage.getItem('photographers') || '[]');
+    }
+    
+    // 渲染摄影师列表
     function renderPhotographers(data) {
         const container = document.getElementById('photographersList');
         if (!container) return;
         
+        if (data.length === 0) {
+            container.innerHTML = '<div class="col-12 text-center text-muted">暂无摄影师数据</div>';
+            return;
+        }
+        
         container.innerHTML = '';
-        data.forEach(photographer => {
-            const stars = '★'.repeat(Math.floor(photographer.rating)) + '☆'.repeat(5 - Math.floor(photographer.rating));
+        data.forEach(p => {
+            // 生成星级显示
+            const fullStars = Math.floor(p.rating);
+            const halfStar = p.rating % 1 >= 0.5 ? 1 : 0;
+            const emptyStars = 5 - fullStars - halfStar;
+            let starsHtml = '';
+            for (let i = 0; i < fullStars; i++) starsHtml += '★';
+            if (halfStar) starsHtml += '½';
+            for (let i = 0; i < emptyStars; i++) starsHtml += '☆';
+            
             container.innerHTML += `
                 <div class="col-md-6 col-lg-4">
                     <div class="card photographer-card h-100">
                         <div class="text-center pt-3">
-                            <img src="${photographer.avatar}" class="avatar" alt="${photographer.name}">
+                            <img src="${p.avatar}" class="avatar" alt="${p.name}" onerror="this.src='https://picsum.photos/200/200?random=1'">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title text-center">${photographer.name}</h5>
-                            <p class="card-text text-center text-muted small">${photographer.desc}</p>
+                            <h5 class="card-title text-center">${escapeHtml(p.name)}</h5>
+                            <p class="card-text text-center text-muted small">${escapeHtml(p.desc)}</p>
                             <div class="text-center mb-2">
-                                <span class="badge bg-secondary">${photographer.style}</span>
+                                <span class="badge bg-secondary">${escapeHtml(p.style)}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-primary fw-bold">¥${photographer.price}/起</span>
-                                <span class="text-warning">${stars} ${photographer.rating}</span>
+                                <span class="text-primary fw-bold">¥${p.price}/起</span>
+                                <span class="text-warning">${starsHtml} ${p.rating}</span>
                             </div>
-                            <a href="booking.html?photographer=${photographer.id}" class="btn btn-outline-primary mt-3 w-100">预约 ${photographer.name}</a>
+                            <a href="booking.html?photographer=${p.id}" class="btn btn-outline-primary mt-3 w-100">预约 ${escapeHtml(p.name)}</a>
                         </div>
                     </div>
                 </div>
@@ -156,43 +181,53 @@
         });
     }
     
+    // 防止XSS攻击
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // 筛选和排序
     function filterAndSort() {
-        let filtered = [...photographers];
-        
+        let photographers = getPhotographers();
         const style = document.getElementById('styleFilter')?.value || 'all';
         const price = document.getElementById('priceFilter')?.value || 'all';
         const sort = document.getElementById('sortFilter')?.value || 'default';
         
         // 风格筛选
         if (style !== 'all') {
-            filtered = filtered.filter(p => p.style === style);
+            photographers = photographers.filter(p => p.style === style);
         }
         
         // 价格筛选
         if (price !== 'all') {
             const [min, max] = price.split('-').map(Number);
-            filtered = filtered.filter(p => p.price >= min && (max === 9999 || p.price <= max));
+            photographers = photographers.filter(p => p.price >= min && p.price <= max);
         }
         
         // 排序
         if (sort === 'price_asc') {
-            filtered.sort((a, b) => a.price - b.price);
+            photographers.sort((a, b) => a.price - b.price);
         } else if (sort === 'price_desc') {
-            filtered.sort((a, b) => b.price - a.price);
+            photographers.sort((a, b) => b.price - a.price);
         } else if (sort === 'rating') {
-            filtered.sort((a, b) => b.rating - a.rating);
+            photographers.sort((a, b) => b.rating - a.rating);
         }
         
-        renderPhotographers(filtered);
+        renderPhotographers(photographers);
     }
     
-    const applyBtn = document.getElementById('applyFilter');
-    if (applyBtn) {
-        applyBtn.addEventListener('click', filterAndSort);
-    }
+    // ========== 页面初始化 ==========
+    initPhotographers();
+    renderPhotographers(getPhotographers());
     
-    // 初始渲染
-    renderPhotographers(photographers);
+    // 绑定筛选按钮事件
+    document.getElementById('applyFilter')?.addEventListener('click', filterAndSort);
 </script>
 </body>
 </html>
