@@ -6,29 +6,15 @@
     <title>管理后台 - 约拍网</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .sidebar {
-            background-color: #343a40;
-            min-height: 100vh;
-        }
-        .sidebar .nav-link {
-            color: #fff;
-            padding: 12px 20px;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #495057;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-        }
-        .status-badge {
-            cursor: pointer;
-        }
-        .footer {
-            background-color: #333;
-            color: white;
-            padding: 15px 0;
-            margin-top: 30px;
-        }
+        .sidebar { background-color: #343a40; min-height: 100vh; }
+        .sidebar .nav-link { color: #fff; padding: 12px 20px; }
+        .sidebar .nav-link:hover { background-color: #495057; }
+        .sidebar .nav-link.active { background-color: #0d6efd; }
+        .status-badge { cursor: pointer; }
+        .footer { background-color: #333; color: white; padding: 15px 0; margin-top: 30px; }
+        .preview-img { max-width: 100px; max-height: 100px; margin-top: 10px; }
+        .avatar-preview { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .work-card-admin { margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -42,21 +28,12 @@
                 <p class="text-white-50 small" id="adminName">管理员</p>
             </div>
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#" data-page="orders">📋 订单管理</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-page="works">🖼️ 作品管理</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-page="customers">👥 客户管理</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-page="settings">⚙️ 服务设置</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="#" id="logoutBtn">🚪 退出登录</a>
-                </li>
+                <li class="nav-item"><a class="nav-link active" href="#" data-page="orders">📋 订单管理</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-page="works">🖼️ 作品管理</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-page="photographers">📸 摄影师管理</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-page="customers">👥 客户管理</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" data-page="settings">⚙️ 服务设置</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="#" id="logoutBtn">🚪 退出登录</a></li>
             </ul>
         </div>
         
@@ -65,94 +42,68 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 id="pageTitle">订单管理</h2>
                 <button class="btn btn-success" id="addWorkBtn" style="display: none;">+ 上传新作品</button>
+                <button class="btn btn-primary" id="addPhotographerBtn" style="display: none;">+ 添加摄影师</button>
             </div>
             
             <!-- 订单管理页面 -->
             <div id="ordersPage">
                 <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">所有预约订单</h5>
-                    </div>
+                    <div class="card-header bg-white"><h5 class="mb-0">所有预约订单</h5></div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>订单号</th>
-                                        <th>客户姓名</th>
-                                        <th>联系电话</th>
-                                        <th>摄影师</th>
-                                        <th>套餐价格</th>
-                                        <th>预约时间</th>
-                                        <th>状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ordersTableBody">
-                                    <tr>
-                                        <td colspan="8" class="text-center">暂无订单</td>
-                                    </tr>
-                                </tbody>
+                                <thead><tr><th>订单号</th><th>客户姓名</th><th>联系电话</th><th>摄影师</th><th>套餐价格</th><th>预约时间</th><th>状态</th><th>操作</th></tr></thead>
+                                <tbody id="ordersTableBody"><tr><td colspan="8" class="text-center">暂无订单</td></tr></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- 作品管理页面（默认隐藏） -->
+            <!-- 作品管理页面 -->
             <div id="worksPage" style="display: none;">
-                <div class="row" id="worksManageGrid">
-                    <!-- 作品管理卡片会动态加载 -->
+                <div class="row" id="worksManageGrid"></div>
+            </div>
+            
+            <!-- 摄影师管理页面 -->
+            <div id="photographersPage" style="display: none;">
+                <div class="card">
+                    <div class="card-header bg-white"><h5 class="mb-0">摄影师列表</h5></div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead><tr><th>头像</th><th>姓名</th><th>风格</th><th>价格</th><th>评分</th><th>描述</th><th>操作</th></tr></thead>
+                                <tbody id="photographersTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <!-- 客户管理页面（默认隐藏） -->
+            <!-- 客户管理页面 -->
             <div id="customersPage" style="display: none;">
                 <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">客户信息列表</h5>
-                    </div>
+                    <div class="card-header bg-white"><h5 class="mb-0">客户信息列表</h5></div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>客户姓名</th>
-                                        <th>联系电话</th>
-                                        <th>预约次数</th>
-                                        <th>最近预约</th>
-                                        <th>总消费</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="customersTableBody">
-                                </tbody>
+                                <thead><tr><th>客户姓名</th><th>联系电话</th><th>预约次数</th><th>最近预约</th><th>总消费</th><th>操作</th></tr></thead>
+                                <tbody id="customersTableBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- 服务设置页面（默认隐藏） -->
+            <!-- 服务设置页面 -->
             <div id="settingsPage" style="display: none;">
                 <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">服务套餐设置</h5>
-                    </div>
+                    <div class="card-header bg-white"><h5 class="mb-0">服务套餐设置</h5></div>
                     <div class="card-body">
                         <form id="settingsForm">
-                            <div class="mb-3">
-                                <label class="form-label">基础套餐价格 (元)</label>
-                                <input type="number" class="form-control" id="basicPrice" value="129">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">标准套餐价格 (元)</label>
-                                <input type="number" class="form-control" id="standardPrice" value="225">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">豪华套餐价格 (元)</label>
-                                <input type="number" class="form-control" id="premiumPrice" value="488">
-                            </div>
+                            <div class="mb-3"><label class="form-label">基础套餐价格 (元)</label><input type="number" class="form-control" id="basicPrice" value="129"></div>
+                            <div class="mb-3"><label class="form-label">标准套餐价格 (元)</label><input type="number" class="form-control" id="standardPrice" value="225"></div>
+                            <div class="mb-3"><label class="form-label">豪华套餐价格 (元)</label><input type="number" class="form-control" id="premiumPrice" value="488"></div>
                             <button type="submit" class="btn btn-primary">保存设置</button>
                         </form>
                     </div>
@@ -162,128 +113,190 @@
     </div>
 </div>
 
-<!-- 修改状态模态框 -->
-<div class="modal fade" id="statusModal" tabindex="-1">
+<!-- 上传/编辑作品模态框 -->
+<div class="modal fade" id="workModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">修改订单状态</h5>
+                <h5 class="modal-title" id="workModalTitle">上传新作品</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="currentOrderId">
-                <label class="form-label">选择新状态</label>
-                <select class="form-select" id="newStatus">
-                    <option value="待审核">待审核</option>
-                    <option value="已确认">已确认</option>
-                    <option value="已完成">已完成</option>
-                    <option value="已取消">已取消</option>
-                </select>
+                <input type="hidden" id="editWorkIndex" value="-1">
+                <div class="mb-3"><label class="form-label">作品标题</label><input type="text" class="form-control" id="workTitle" placeholder="例如：清新人像"></div>
+                <div class="mb-3"><label class="form-label">作品分类</label><select class="form-select" id="workCategory"><option value="人像">人像</option><option value="风景">风景</option><option value="婚礼">婚礼</option><option value="商业">商业</option></select></div>
+                <div class="mb-3"><label class="form-label">选择摄影师</label><select class="form-select" id="workPhotographer"></select></div>
+                <div class="mb-3"><label class="form-label">作品描述</label><textarea class="form-control" id="workDescription" rows="2" placeholder="描述作品风格、拍摄地点等..."></textarea></div>
+                <div class="mb-3"><label class="form-label">选择图片</label><input type="file" class="form-control" id="workImageFile" accept="image/*"></div>
+                <div id="imagePreview" class="text-center"></div>
+                <div class="form-text small text-muted mt-2">不选择新图片则保持原图片不变</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="confirmStatusChange">确认修改</button>
+                <button type="button" class="btn btn-primary" id="confirmWorkBtn">确认</button>
             </div>
         </div>
     </div>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <div class="text-center">
-            <p class="mb-0">&copy; 2026 约拍网 版权所有</p>
+<!-- 编辑摄影师模态框 -->
+<div class="modal fade" id="editPhotographerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑摄影师</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editPhotographerIndex" value="-1">
+                <div class="mb-3"><label class="form-label">姓名</label><input type="text" class="form-control" id="editPhotographerName"></div>
+                <div class="mb-3"><label class="form-label">摄影风格</label><select class="form-select" id="editPhotographerStyle"><option value="人像">人像</option><option value="婚礼">婚礼</option><option value="风景">风景</option><option value="商业">商业</option></select></div>
+                <div class="mb-3"><label class="form-label">价格 (元/起)</label><input type="number" class="form-control" id="editPhotographerPrice"></div>
+                <div class="mb-3"><label class="form-label">评分</label><select class="form-select" id="editPhotographerRating"><option value="5">★★★★★ 5星</option><option value="4.5">★★★★☆ 4.5星</option><option value="4">★★★★☆ 4星</option><option value="3.5">★★★☆☆ 3.5星</option></select></div>
+                <div class="mb-3"><label class="form-label">描述</label><textarea class="form-control" id="editPhotographerDesc" rows="2"></textarea></div>
+                <div class="mb-3"><label class="form-label">更换头像</label><input type="file" class="form-control" id="editPhotographerAvatarFile" accept="image/*"></div>
+                <div id="editAvatarPreview" class="text-center"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirmEditPhotographer">保存修改</button>
+            </div>
         </div>
     </div>
-</footer>
+</div>
+
+<!-- 添加摄影师模态框 -->
+<div class="modal fade" id="addPhotographerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">添加摄影师</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <div class="mb-3"><label class="form-label">姓名</label><input type="text" class="form-control" id="newPhotographerName" placeholder="例如：陈摄影师"></div>
+                <div class="mb-3"><label class="form-label">摄影风格</label><select class="form-select" id="newPhotographerStyle"><option value="人像">人像</option><option value="婚礼">婚礼</option><option value="风景">风景</option><option value="商业">商业</option></select></div>
+                <div class="mb-3"><label class="form-label">价格 (元/起)</label><input type="number" class="form-control" id="newPhotographerPrice" placeholder="例如：399"></div>
+                <div class="mb-3"><label class="form-label">评分</label><select class="form-select" id="newPhotographerRating"><option value="5">★★★★★ 5星</option><option value="4.5">★★★★☆ 4.5星</option><option value="4">★★★★☆ 4星</option><option value="3.5">★★★☆☆ 3.5星</option></select></div>
+                <div class="mb-3"><label class="form-label">描述</label><textarea class="form-control" id="newPhotographerDesc" rows="2" placeholder="擅长..."></textarea></div>
+                <div class="mb-3"><label class="form-label">头像图片</label><input type="file" class="form-control" id="photographerAvatarFile" accept="image/*"></div>
+                <div id="avatarPreview" class="text-center"></div>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button><button type="button" class="btn btn-primary" id="confirmAddPhotographer">确认添加</button></div>
+        </div>
+    </div>
+</div>
+
+<!-- 修改状态模态框 -->
+<div class="modal fade" id="statusModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">修改订单状态</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <input type="hidden" id="currentOrderId">
+                <label class="form-label">选择新状态</label>
+                <select class="form-select" id="newStatus">
+                    <option value="待审核">待审核</option><option value="已确认">已确认</option>
+                    <option value="已完成">已完成</option><option value="已取消">已取消</option>
+                </select>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button><button type="button" class="btn btn-primary" id="confirmStatusChange">确认修改</button></div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer"><div class="container text-center"><p>&copy; 2026 约拍网 版权所有</p></div></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // 检查登录状态
-    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
-        window.location.href = 'login.html';
-    }
+    // ========== 默认数据 ==========
+    const defaultPhotographers = [
+        { id: 1, name: "张摄影师", avatar: "https://picsum.photos/200/200?random=30", style: "人像", price: 225, rating: 5, desc: "擅长人像摄影，风格清新自然，拍摄经验5年。" },
+        { id: 2, name: "李摄影师", avatar: "https://picsum.photos/200/200?random=31", style: "婚礼", price: 325, rating: 4.5, desc: "专注婚礼摄影，捕捉最动人的瞬间。" },
+        { id: 3, name: "王摄影师", avatar: "https://picsum.photos/200/200?random=32", style: "商业", price: 588, rating: 5, desc: "商业摄影专家，产品拍摄、广告摄影。" },
+        { id: 4, name: "赵摄影师", avatar: "https://picsum.photos/200/200?random=33", style: "风景", price: 89, rating: 4, desc: "热爱大自然，擅长风光摄影。" },
+        { id: 5, name: "孙摄影师", avatar: "https://picsum.photos/200/200?random=34", style: "人像", price: 129, rating: 4.5, desc: "时尚人像摄影师，作品多次获奖。" },
+        { id: 6, name: "周摄影师", avatar: "https://picsum.photos/200/200?random=35", style: "婚礼", price: 488, rating: 5, desc: "婚礼摄影大师，记录每一份感动。" }
+    ];
     
+    const defaultWorks = [
+        { title: "清新人像", category: "人像", photographer: "张摄影师", description: "日系清新风格，自然光拍摄", image: "https://picsum.photos/id/20/400/300" },
+        { title: "时尚人像", category: "人像", photographer: "孙摄影师", description: "时尚大片风格，棚拍", image: "https://picsum.photos/id/30/400/300" },
+        { title: "山川风景", category: "风景", photographer: "赵摄影师", description: "壮丽山川，自然风光", image: "https://picsum.photos/id/15/400/300" },
+        { title: "森林风景", category: "风景", photographer: "赵摄影师", description: "森林秘境，自然光影", image: "https://picsum.photos/id/96/400/300" },
+        { title: "浪漫婚礼", category: "婚礼", photographer: "李摄影师", description: "浪漫瞬间，永恒回忆", image: "https://picsum.photos/id/29/400/300" },
+        { title: "产品摄影", category: "商业", photographer: "王摄影师", description: "商业产品，质感拍摄", image: "https://picsum.photos/id/0/400/300" }
+    ];
+    
+    function initData() {
+        if (!localStorage.getItem('photographers')) {
+            localStorage.setItem('photographers', JSON.stringify(defaultPhotographers));
+        }
+        if (!localStorage.getItem('works')) {
+            localStorage.setItem('works', JSON.stringify(defaultWorks));
+        }
+        if (!localStorage.getItem('bookings')) {
+            localStorage.setItem('bookings', JSON.stringify([]));
+        }
+    }
+    initData();
+    
+    // 检查登录状态
+    if (localStorage.getItem('isAdminLoggedIn') !== 'true') window.location.href = 'login.html';
     document.getElementById('adminName').textContent = localStorage.getItem('adminUsername') || '管理员';
     
-    // 页面切换
+    // ========== 动态加载摄影师下拉框 ==========
+    function loadPhotographerOptions() {
+        const photographers = JSON.parse(localStorage.getItem('photographers') || '[]');
+        const select = document.getElementById('workPhotographer');
+        if (!select) return;
+        select.innerHTML = '';
+        photographers.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.name;
+            option.textContent = `${p.name}（${p.style} ¥${p.price}起）`;
+            select.appendChild(option);
+        });
+    }
+    
+    // ========== 页面切换 ==========
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
     const pages = {
         orders: document.getElementById('ordersPage'),
         works: document.getElementById('worksPage'),
+        photographers: document.getElementById('photographersPage'),
         customers: document.getElementById('customersPage'),
         settings: document.getElementById('settingsPage')
     };
     const pageTitle = document.getElementById('pageTitle');
     const addWorkBtn = document.getElementById('addWorkBtn');
+    const addPhotographerBtn = document.getElementById('addPhotographerBtn');
     
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             if (this.id === 'logoutBtn') return;
             e.preventDefault();
             const page = this.getAttribute('data-page');
-            
             navLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
+            Object.keys(pages).forEach(key => { if(pages[key]) pages[key].style.display = 'none'; });
+            if (pages[page]) pages[page].style.display = 'block';
             
-            Object.keys(pages).forEach(key => {
-                pages[key].style.display = 'none';
-            });
-            
-            if (pages[page]) {
-                pages[page].style.display = 'block';
-            }
-            
-            if (page === 'orders') {
-                pageTitle.textContent = '订单管理';
-                addWorkBtn.style.display = 'none';
-                loadOrders();
-            } else if (page === 'works') {
-                pageTitle.textContent = '作品管理';
-                addWorkBtn.style.display = 'inline-block';
-                loadWorksManage();
-            } else if (page === 'customers') {
-                pageTitle.textContent = '客户管理';
-                addWorkBtn.style.display = 'none';
-                loadCustomers();
-            } else if (page === 'settings') {
-                pageTitle.textContent = '服务设置';
-                addWorkBtn.style.display = 'none';
-            }
+            if (page === 'orders') { pageTitle.textContent = '订单管理'; addWorkBtn.style.display = 'none'; addPhotographerBtn.style.display = 'none'; loadOrders(); }
+            else if (page === 'works') { pageTitle.textContent = '作品管理'; addWorkBtn.style.display = 'inline-block'; addPhotographerBtn.style.display = 'none'; loadWorksManage(); loadPhotographerOptions(); }
+            else if (page === 'photographers') { pageTitle.textContent = '摄影师管理'; addWorkBtn.style.display = 'none'; addPhotographerBtn.style.display = 'inline-block'; loadPhotographersManage(); }
+            else if (page === 'customers') { pageTitle.textContent = '客户管理'; addWorkBtn.style.display = 'none'; addPhotographerBtn.style.display = 'none'; loadCustomers(); }
+            else if (page === 'settings') { pageTitle.textContent = '服务设置'; addWorkBtn.style.display = 'none'; addPhotographerBtn.style.display = 'none'; }
         });
     });
     
-    // 加载订单
+    // ========== 订单管理 ==========
     function loadOrders() {
         const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
         const tbody = document.getElementById('ordersTableBody');
-        
-        if (bookings.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" class="text-center">暂无订单</td></tr>';
-            return;
-        }
-        
+        if (bookings.length === 0) { tbody.innerHTML = '<tr><td colspan="8" class="text-center">暂无订单</td></tr>'; return; }
         tbody.innerHTML = '';
         bookings.reverse().forEach(booking => {
-            const statusClass = booking.status === '待审核' ? 'warning' : 
-                               (booking.status === '已确认' ? 'info' : 
-                               (booking.status === '已完成' ? 'success' : 'secondary'));
-            tbody.innerHTML += `
-                <tr>
-                    <td>${booking.orderId}</td>
-                    <td>${booking.name}</td>
-                    <td>${booking.phone}</td>
-                    <td>摄影师${booking.photographer}</td>
-                    <td>¥${booking.package}</td>
-                    <td>${booking.date} ${booking.time}</td>
-                    <td><span class="badge bg-${statusClass} status-badge" data-orderid="${booking.orderId}" data-status="${booking.status}">${booking.status}</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-danger" onclick="deleteOrder('${booking.orderId}')">删除</button>
-                    </td>
-                </tr>
-            `;
+            const statusClass = booking.status === '待审核' ? 'warning' : (booking.status === '已确认' ? 'info' : (booking.status === '已完成' ? 'success' : 'secondary'));
+            tbody.innerHTML += `<tr><td>${booking.orderId}</td><td>${booking.name}</td><td>${booking.phone}</td><td>${booking.photographer}</td><td>¥${booking.package}</td><td>${booking.date} ${booking.time}</td><td><span class="badge bg-${statusClass} status-badge" data-orderid="${booking.orderId}" data-status="${booking.status}">${booking.status}</span></td><td><button class="btn btn-sm btn-danger" onclick="deleteOrder('${booking.orderId}')">删除</button></td></tr>`;
         });
-        
-        // 添加状态点击事件
         document.querySelectorAll('.status-badge').forEach(badge => {
             badge.addEventListener('click', function() {
                 document.getElementById('currentOrderId').value = this.getAttribute('data-orderid');
@@ -292,8 +305,6 @@
             });
         });
     }
-    
-    // 删除订单
     window.deleteOrder = function(orderId) {
         if (confirm('确定要删除这个订单吗？')) {
             let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
@@ -301,44 +312,40 @@
             localStorage.setItem('bookings', JSON.stringify(bookings));
             loadOrders();
         }
-    }
-    
-    // 确认修改状态
-    document.getElementById('confirmStatusChange').addEventListener('click', function() {
+    };
+    document.getElementById('confirmStatusChange')?.addEventListener('click', function() {
         const orderId = document.getElementById('currentOrderId').value;
         const newStatus = document.getElementById('newStatus').value;
-        
         let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
         const booking = bookings.find(b => b.orderId === orderId);
-        if (booking) {
-            booking.status = newStatus;
-            localStorage.setItem('bookings', JSON.stringify(bookings));
-        }
-        
+        if (booking) { booking.status = newStatus; localStorage.setItem('bookings', JSON.stringify(bookings)); }
         bootstrap.Modal.getInstance(document.getElementById('statusModal')).hide();
         loadOrders();
     });
     
-    // 加载作品管理
+    // ========== 作品管理 ==========
+    let pendingImageBase64 = '';
+    let editMode = false;
+    const workModal = new bootstrap.Modal(document.getElementById('workModal'));
+    
     function loadWorksManage() {
         const works = JSON.parse(localStorage.getItem('works') || '[]');
         const container = document.getElementById('worksManageGrid');
-        
-        if (works.length === 0) {
-            container.innerHTML = '<div class="col-12 text-center text-muted">暂无作品，点击"上传新作品"添加</div>';
-            return;
-        }
-        
+        if (works.length === 0) { container.innerHTML = '<div class="col-12 text-center text-muted">暂无作品，点击"上传新作品"添加</div>'; return; }
         container.innerHTML = '';
         works.forEach((work, index) => {
             container.innerHTML += `
                 <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <img src="${work.image}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    <div class="card work-card-admin">
+                        <img src="${work.image}" class="card-img-top" style="height:200px;object-fit:cover" onerror="this.src='https://picsum.photos/400/300?random=1'">
                         <div class="card-body">
-                            <h6>${work.title}</h6>
-                            <p class="small text-muted">${work.category}</p>
-                            <button class="btn btn-sm btn-danger" onclick="deleteWork(${index})">删除</button>
+                            <h6>${escapeHtml(work.title)}</h6>
+                            <p class="small text-muted mb-1">${work.category} | 📷 ${work.photographer || '未指定'}</p>
+                            <p class="small">${escapeHtml(work.description || '')}</p>
+                            <div class="btn-group w-100">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editWork(${index})">编辑</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteWork(${index})">删除</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -346,88 +353,272 @@
         });
     }
     
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    window.editWork = function(index) {
+        const works = JSON.parse(localStorage.getItem('works') || '[]');
+        const work = works[index];
+        if (!work) return;
+        editMode = true;
+        document.getElementById('editWorkIndex').value = index;
+        document.getElementById('workModalTitle').textContent = '编辑作品';
+        document.getElementById('workTitle').value = work.title || '';
+        document.getElementById('workCategory').value = work.category || '人像';
+        document.getElementById('workPhotographer').value = work.photographer || '';
+        document.getElementById('workDescription').value = work.description || '';
+        document.getElementById('workImageFile').value = '';
+        document.getElementById('imagePreview').innerHTML = work.image ? `<img src="${work.image}" class="preview-img" alt="当前图片"><div class="small text-muted">当前图片</div>` : '';
+        pendingImageBase64 = '';
+        workModal.show();
+    };
+    
     window.deleteWork = function(index) {
-        if (confirm('确定删除这个作品吗？')) {
+        if (confirm('确定要删除这个作品吗？')) {
             let works = JSON.parse(localStorage.getItem('works') || '[]');
             works.splice(index, 1);
             localStorage.setItem('works', JSON.stringify(works));
             loadWorksManage();
+            alert('删除成功！');
         }
-    }
+    };
     
-    // 上传作品
-    addWorkBtn.addEventListener('click', function() {
-        const title = prompt('请输入作品标题：');
-        if (!title) return;
-        const category = prompt('请输入作品分类（人像/风景/婚礼/商业）：');
-        if (!category) return;
-        const imageUrl = prompt('请输入图片URL（可使用随机图片如：https://picsum.photos/400/300?random=' + Date.now() + '）');
-        if (!imageUrl) return;
-        
-        const works = JSON.parse(localStorage.getItem('works') || '[]');
-        works.push({ title, category, image: imageUrl });
-        localStorage.setItem('works', JSON.stringify(works));
-        loadWorksManage();
-        alert('作品上传成功！');
+    addWorkBtn.addEventListener('click', () => {
+        editMode = false;
+        document.getElementById('editWorkIndex').value = '-1';
+        document.getElementById('workModalTitle').textContent = '上传新作品';
+        document.getElementById('workTitle').value = '';
+        document.getElementById('workCategory').value = '人像';
+        document.getElementById('workPhotographer').value = '';
+        document.getElementById('workDescription').value = '';
+        document.getElementById('workImageFile').value = '';
+        document.getElementById('imagePreview').innerHTML = '';
+        pendingImageBase64 = '';
+        workModal.show();
     });
     
-    // 加载客户管理
-    function loadCustomers() {
-        const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-        const customerMap = new Map();
+    document.getElementById('workImageFile')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            pendingImageBase64 = ev.target.result;
+            document.getElementById('imagePreview').innerHTML = `<img src="${pendingImageBase64}" class="preview-img" alt="预览"><div class="small text-success">新图片已选择</div>`;
+        };
+        reader.readAsDataURL(file);
+    });
+    
+    document.getElementById('confirmWorkBtn')?.addEventListener('click', function() {
+        const title = document.getElementById('workTitle').value.trim();
+        const category = document.getElementById('workCategory').value;
+        const photographer = document.getElementById('workPhotographer').value;
+        const description = document.getElementById('workDescription').value.trim();
+        if (!title) { alert('请输入作品标题'); return; }
+        if (!photographer) { alert('请选择摄影师'); return; }
         
-        bookings.forEach(booking => {
-            if (!customerMap.has(booking.phone)) {
-                customerMap.set(booking.phone, {
-                    name: booking.name,
-                    phone: booking.phone,
-                    count: 1,
-                    lastDate: booking.date,
-                    total: parseInt(booking.package)
-                });
-            } else {
-                const c = customerMap.get(booking.phone);
-                c.count++;
-                if (booking.date > c.lastDate) c.lastDate = booking.date;
-                c.total += parseInt(booking.package);
+        let works = JSON.parse(localStorage.getItem('works') || '[]');
+        
+        if (editMode) {
+            const index = parseInt(document.getElementById('editWorkIndex').value);
+            if (index >= 0 && works[index]) {
+                works[index].title = title;
+                works[index].category = category;
+                works[index].photographer = photographer;
+                works[index].description = description;
+                if (pendingImageBase64) {
+                    works[index].image = pendingImageBase64;
+                }
+                localStorage.setItem('works', JSON.stringify(works));
+                alert('作品修改成功！');
             }
-        });
-        
-        const tbody = document.getElementById('customersTableBody');
-        if (customerMap.size === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center">暂无客户数据</td></tr>';
-            return;
+        } else {
+            if (!pendingImageBase64) { alert('请选择图片'); return; }
+            works.push({ title, category, photographer, description, image: pendingImageBase64 });
+            localStorage.setItem('works', JSON.stringify(works));
+            alert('作品上传成功！');
         }
-        
+        loadWorksManage();
+        workModal.hide();
+    });
+    
+    // ========== 摄影师管理（支持增删改，全部可删除） ==========
+    let pendingEditAvatarBase64 = '';
+    let editPhotographerIndex = -1;
+    const editPhotographerModal = new bootstrap.Modal(document.getElementById('editPhotographerModal'));
+    const addPhotographerModal = new bootstrap.Modal(document.getElementById('addPhotographerModal'));
+    
+    function loadPhotographersManage() {
+        const photographers = JSON.parse(localStorage.getItem('photographers') || '[]');
+        const tbody = document.getElementById('photographersTableBody');
+        if (photographers.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="text-center">暂无摄影师数据</td></tr>'; return; }
         tbody.innerHTML = '';
-        customerMap.forEach(customer => {
+        photographers.forEach((p, index) => {
             tbody.innerHTML += `
                 <tr>
-                    <td>${customer.name}</td>
-                    <td>${customer.phone}</td>
-                    <td>${customer.count}次</td>
-                    <td>${customer.lastDate}</td>
-                    <td>¥${customer.total}</td>
-                    <td><button class="btn btn-sm btn-outline-primary" onclick="alert('客户电话：${customer.phone}')">联系</button></td>
+                    <td><img src="${p.avatar}" class="avatar-preview" onerror="this.src='https://picsum.photos/50/50?random=1'"></td>
+                    <td>${escapeHtml(p.name)}</td>
+                    <td>${p.style}</td>
+                    <td>¥${p.price}</td>
+                    <td>${p.rating}星</td>
+                    <td>${escapeHtml(p.desc.substring(0, 30))}...</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editPhotographer(${index})">编辑</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deletePhotographer(${index})">删除</button>
+                    </td>
                 </tr>
             `;
         });
     }
     
-    // 服务设置保存
-    document.getElementById('settingsForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('套餐价格已保存！');
+    window.editPhotographer = function(index) {
+        const photographers = JSON.parse(localStorage.getItem('photographers') || '[]');
+        const p = photographers[index];
+        if (!p) return;
+        editPhotographerIndex = index;
+        document.getElementById('editPhotographerName').value = p.name;
+        document.getElementById('editPhotographerStyle').value = p.style;
+        document.getElementById('editPhotographerPrice').value = p.price;
+        document.getElementById('editPhotographerRating').value = p.rating;
+        document.getElementById('editPhotographerDesc').value = p.desc;
+        document.getElementById('editPhotographerAvatarFile').value = '';
+        document.getElementById('editAvatarPreview').innerHTML = `<img src="${p.avatar}" class="preview-img" style="border-radius:50%;width:80px;height:80px;"><div class="small text-muted">当前头像</div>`;
+        pendingEditAvatarBase64 = '';
+        editPhotographerModal.show();
+    };
+    
+    window.deletePhotographer = function(index) {
+        if (confirm('确定要删除这个摄影师吗？')) {
+            let photographers = JSON.parse(localStorage.getItem('photographers') || '[]');
+            photographers.splice(index, 1);
+            localStorage.setItem('photographers', JSON.stringify(photographers));
+            loadPhotographersManage();
+            loadPhotographerOptions();
+            alert('删除成功！');
+        }
+    };
+    
+    document.getElementById('editPhotographerAvatarFile')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            pendingEditAvatarBase64 = ev.target.result;
+            document.getElementById('editAvatarPreview').innerHTML = `<img src="${pendingEditAvatarBase64}" class="preview-img" style="border-radius:50%;width:80px;height:80px;"><div class="small text-success">新头像已选择</div>`;
+        };
+        reader.readAsDataURL(file);
     });
     
-    // 退出登录
-    document.getElementById('logoutBtn').addEventListener('click', function() {
+    document.getElementById('confirmEditPhotographer')?.addEventListener('click', function() {
+        const name = document.getElementById('editPhotographerName').value.trim();
+        const style = document.getElementById('editPhotographerStyle').value;
+        const price = parseInt(document.getElementById('editPhotographerPrice').value);
+        const rating = parseFloat(document.getElementById('editPhotographerRating').value);
+        const desc = document.getElementById('editPhotographerDesc').value.trim();
+        if (!name) { alert('请输入摄影师姓名'); return; }
+        if (!price || price <= 0) { alert('请输入有效的价格'); return; }
+        if (!desc) { alert('请输入描述'); return; }
+        
+        let photographers = JSON.parse(localStorage.getItem('photographers') || '[]');
+        if (editPhotographerIndex >= 0 && photographers[editPhotographerIndex]) {
+            photographers[editPhotographerIndex].name = name;
+            photographers[editPhotographerIndex].style = style;
+            photographers[editPhotographerIndex].price = price;
+            photographers[editPhotographerIndex].rating = rating;
+            photographers[editPhotographerIndex].desc = desc;
+            if (pendingEditAvatarBase64) {
+                photographers[editPhotographerIndex].avatar = pendingEditAvatarBase64;
+            }
+            localStorage.setItem('photographers', JSON.stringify(photographers));
+            loadPhotographersManage();
+            loadPhotographerOptions();
+            editPhotographerModal.hide();
+            alert('摄影师修改成功！');
+        }
+    });
+    
+    // 添加摄影师
+    let pendingAvatarBase64 = '';
+    addPhotographerBtn.addEventListener('click', () => {
+        document.getElementById('newPhotographerName').value = '';
+        document.getElementById('newPhotographerPrice').value = '';
+        document.getElementById('newPhotographerDesc').value = '';
+        document.getElementById('photographerAvatarFile').value = '';
+        document.getElementById('avatarPreview').innerHTML = '';
+        pendingAvatarBase64 = '';
+        addPhotographerModal.show();
+    });
+    
+    document.getElementById('photographerAvatarFile')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            pendingAvatarBase64 = ev.target.result;
+            document.getElementById('avatarPreview').innerHTML = `<img src="${pendingAvatarBase64}" class="preview-img" style="border-radius:50%;width:80px;height:80px;">`;
+        };
+        reader.readAsDataURL(file);
+    });
+    
+    document.getElementById('confirmAddPhotographer')?.addEventListener('click', function() {
+        const name = document.getElementById('newPhotographerName').value.trim();
+        const style = document.getElementById('newPhotographerStyle').value;
+        const price = parseInt(document.getElementById('newPhotographerPrice').value);
+        const rating = parseFloat(document.getElementById('newPhotographerRating').value);
+        const desc = document.getElementById('newPhotographerDesc').value.trim();
+        if (!name) { alert('请输入摄影师姓名'); return; }
+        if (!price || price <= 0) { alert('请输入有效的价格'); return; }
+        if (!desc) { alert('请输入描述'); return; }
+        if (!pendingAvatarBase64) { alert('请选择头像图片'); return; }
+        const photographers = JSON.parse(localStorage.getItem('photographers') || '[]');
+        const newId = Math.max(...photographers.map(p => p.id), 0) + 1;
+        photographers.push({ id: newId, name, avatar: pendingAvatarBase64, style, price, rating, desc });
+        localStorage.setItem('photographers', JSON.stringify(photographers));
+        loadPhotographersManage();
+        loadPhotographerOptions();
+        addPhotographerModal.hide();
+        alert(`摄影师 "${name}" 添加成功！`);
+    });
+    
+    // ========== 客户管理 ==========
+    function loadCustomers() {
+        const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+        const customerMap = new Map();
+        bookings.forEach(booking => {
+            if (!customerMap.has(booking.phone)) {
+                customerMap.set(booking.phone, { name: booking.name, phone: booking.phone, count: 1, lastDate: booking.date, total: parseInt(booking.package) });
+            } else {
+                const c = customerMap.get(booking.phone);
+                c.count++; if (booking.date > c.lastDate) c.lastDate = booking.date; c.total += parseInt(booking.package);
+            }
+        });
+        const tbody = document.getElementById('customersTableBody');
+        if (customerMap.size === 0) { tbody.innerHTML = '<tr><td colspan="6" class="text-center">暂无客户数据</td></tr>'; return; }
+        tbody.innerHTML = '';
+        customerMap.forEach(customer => {
+            tbody.innerHTML += `<tr><td>${customer.name}</td><td>${customer.phone}</td><td>${customer.count}次</td><td>${customer.lastDate}</td><td>¥${customer.total}</td><td><button class="btn btn-sm btn-outline-primary" onclick="alert('客户电话：${customer.phone}')">联系</button></td></tr>`;
+        });
+    }
+    
+    // ========== 服务设置 ==========
+    document.getElementById('settingsForm')?.addEventListener('submit', function(e) { 
+        e.preventDefault(); 
+        alert('套餐价格已保存！'); 
+    });
+    
+    // ========== 退出登录 ==========
+    document.getElementById('logoutBtn')?.addEventListener('click', function() {
         localStorage.removeItem('isAdminLoggedIn');
         localStorage.removeItem('adminUsername');
         window.location.href = 'login.html';
     });
     
-    // 初始加载订单
     loadOrders();
 </script>
 </body>
